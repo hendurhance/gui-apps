@@ -150,7 +150,7 @@ def solveMoreOrLess(file: str, num: int, type: str):
 
     
 window = Tk()
-window.geometry("600x600")
+window.geometry("600x300")
 window.title("Student Data Grade Entry App")
 
 
@@ -181,7 +181,7 @@ matric_label.grid(row=2, column=1)
 matricEntry.grid(row=3, column=1)
 
 button = Button(frame, text="Enter Data", command=enterData)
-button.grid(row=1, column=0, sticky="news", padx=50, pady=100)
+button.grid(row=1, column=0, sticky="news", padx=50, pady=10)
 
 # Solve Stats data
 stats_button = Button(frame, text="Solve Stats", command=solveCSV)

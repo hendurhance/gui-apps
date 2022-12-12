@@ -15,8 +15,8 @@ class MyApp:
         self.myParent = parent
         self.myContainer1 = LabelFrame(parent, text="Youtube Search")
         self.myContainer2 = Frame(parent)
-        self.myContainer1.grid()
-        self.myContainer2.grid()
+        self.myContainer1.grid(row=0, column=0, padx=50, pady=100)
+        self.myContainer2.grid(row=1, column=0, padx=50, pady=10)
 
         self.label1 = Message(self.myContainer1, text="")
 
@@ -24,7 +24,7 @@ class MyApp:
 
         self.entryVariable = StringVar()
         self.textbox = Entry(self.myContainer1)
-        self.textbox.pack(side=TOP)
+        self.textbox.pack(side=TOP, fill=BOTH)
         self.textbox.bind("<Return>", self.searchYoutube)
         self.textbox.focus_set()
 
