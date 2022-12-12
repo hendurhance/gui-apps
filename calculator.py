@@ -19,48 +19,18 @@ def clearData():
     gradeEntry.delete(0, END)
     matricEntry.delete(0, END)
 
-# Open imported files
-def openFile():
-    filename = filedialog.askopenfilename()
-    # check if the file selected is csv/excel
-    file = Path(filename)
-    if file.exists():
-        # Check if file is a csv or xlxs file
-        if filename.endswith(('.csv', '.xlsx')):
-            print("File is: ", filename)
-            # Read file and get those needed columns
-            # Loop through it and push into data.csv
-            with open(filename) as data_file:
-                data_reader = reader(data_file, delimiter=",")
 
-                list_of_col_names = []
-
-                for row in data_reader:
-                    list_of_col_names.append(row)
-
-                    break
-                
-                df = pd.read_csv(file, names=['FirstName', 'Grade'])
-                print("Stats data: ", df.describe())
-
-            print("List of columns are: ", list_of_col_names[0])
-
-    else:
-        print("File does not exists")
-
-# Load data 
 def loadData(file: str):
     newList = []
     with open(file, "r") as f:
-            reader = DictReader(f, delimiter=",")
-            for row in reader:
-                name = row["Name"]
-                grade = row["Grade"]
-                matric = row["Matric"]
-                data = {'Name': name, 'Grade': int(grade), 'Matric': int(matric)}
-                newList.append(data)
+        reader = DictReader(f, delimiter=",")
+        for row in reader:
+            name = row["Name"]
+            grade = row["Grade"]
+            matric = row["Matric"]
+            data = {'Name': name, 'Grade': int(grade), 'Matric': int(matric)}
+            newList.append(data)
     return newList
-
 
 
 def enterData():
@@ -71,47 +41,71 @@ def enterData():
     if firstName and lastName:
         grade = gradeEntry.get()
         matric = matricEntry.get()
+        if grade and matric:
+            clearData()
 
-        # Output the following
-        print("Name is {firstName} {lastName}".format(
-            firstName=firstName, lastName=lastName))
-        print("Grade: ", grade)
-        print("Matric Number is: ", matric)
-        clearData()
+            filepath = "data.csv"
 
-        filepath = "data.csv"
+            with open(filepath, 'a') as file:
+                field_names = ['Name', 'Matric', 'Grade']
+                input = DictWriter(file, fieldnames=field_names)
+                row = {'Name': firstName + " " + lastName,
+                    'Matric': matric, 'Grade': grade+''}
+                input.writerow(row)
 
-        with open(filepath, 'a') as file:
-            field_names = ['Name', 'Matric', 'Grade']
-            input = DictWriter(file, fieldnames=field_names)
-            row = {'Name': firstName + " " + lastName, 'Matric': matric, 'Grade': grade}
-            input.writerow(row)
+                file.close()
+        else:
+            messagebox.showerror(None, 'Grade and Score is required')
+    else:
+        messagebox.showerror(None, 'Firstname and Lastname is required')
 
-            file.close()
+
+import tkinter as tk
 
 def solveCSV():
     file = "data.csv"
     df = pd.read_csv(file, usecols=['Name', 'Grade'])
-    table = df.loc[:, 'Grade']
+    table = df.loc[:, 'Grade']  
     students = np.array(df)
-    print('Mean: ', np.mean(table))
-    print('Maximum Score is: ', max(table))
-    print('Minimum Score is: ', min(table))
-    print('Median score is: ', solveMedian(file))
-    print('Best Student is: ', solveBest(file, max(table)))
-    print("Students that score 70 and above are: ", solveMoreOrLess(file, 70, "greater"))
-    print("Students that failed are: ", solveMoreOrLess(file, 45, "less"))
+    
+    # Create a new Tkinter window
+    window = tk.Tk()
+    
+    # Add a label to the window that displays the mean
+    mean_label = tk.Label(window, text="Mean: " + str(np.mean(table)))
+    mean_label.pack()
+    
+    # Add a label to the window that displays the maximum score
+    max_label = tk.Label(window, text="Maximum Score: " + str(max(table)))
+    max_label.pack()
+    
+    # Add a label to the window that displays the minimum score
+    min_label = tk.Label(window, text="Minimum Score: " + str(min(table)))
+    min_label.pack()
+
+    # Add a label to the window that displays the minimum score
+    median_label = tk.Label(window, text="Median Score: " + str(solveMedian(file)))
+    median_label.pack()
+
+    above_label = tk.Label(window, text="Students that score 70 and above are: " + str(solveMoreOrLess(file, 70, "greater")))
+    above_label.pack()
+
+    below_label = tk.Label(window, text="Students that failed are: " + str(solveMoreOrLess(file, 45, "less")))
+    below_label.pack()
+    
+    window.mainloop()
 
 # Define stats functions
+
 
 def solveMedian(file: str):
     newList = []
     with open(file, "r") as f:
-            reader = DictReader(f, delimiter=",")
-            for row in reader:
-                grade = row["Grade"]
-                if grade is not None:
-                    newList.append(int(row['Grade']))
+        reader = DictReader(f, delimiter=",")
+        for row in reader:
+            grade = row["Grade"]
+            if grade is not None:
+                newList.append(int(row['Grade']))
     newList.sort()
     n = len(newList)
     median = newList[n // 2]
@@ -119,40 +113,42 @@ def solveMedian(file: str):
         median = (median + newList[n // 2-1]) / 2
     return median
 
-def solveBest(file: str, best :int):
+
+def solveBest(file: str, best: int):
     newList = []
     with open(file, "r") as f:
-            reader = DictReader(f, delimiter=",")
-            for row in reader:
-                name = row["Name"]
-                grade = row["Grade"]
-                data = {'Name': name, 'Grade': int(grade)}
-                newList.append(data)
+        reader = DictReader(f, delimiter=",")
+        for row in reader:
+            name = row["Name"]
+            grade = row["Grade"]
+            data = {'Name': name, 'Grade': int(grade)}
+            newList.append(data)
     best_student = []
     for i in newList:
         if i['Grade'] >= best:
-            best_student.append(i)
-    return best_student[0]['Name'] + " with a score of: " + str(best_student[0]['Grade'])
+            best_student.append(i['Name'])
+    return ", ".join(best_student)
+
 
 def solveMoreOrLess(file: str, num: int, type: str):
-    newList = []
+    newList = {}
     with open(file, "r") as f:
-            reader = DictReader(f, delimiter=",")
-            for row in reader:
-                name = row["Name"]
-                grade = row["Grade"]
-                data = {'Name': name, 'Grade': int(grade)}
-                newList.append(data)
+        reader = DictReader(f, delimiter=",")
+        for row in reader:
+            name = row["Name"]
+            grade = row["Grade"]
+            newList[name] = int(grade)
     solved_data = []
-    for i in newList:
+    for name, grade in newList.items():
         if type == 'greater':
-            if i["Grade"] > num:
-                solved_data.append(i['Name'])
+            if grade > num:
+                solved_data.append(name)
         elif type == "less":
-            if i["Grade"] < num:
-                solved_data.append(i['Name'])
-    return solved_data
+            if grade < num:
+                solved_data.append(name)
+    return ", ".join(solved_data)
 
+    
 window = Tk()
 window.geometry("600x600")
 window.title("Student Data Grade Entry App")
@@ -186,10 +182,6 @@ matricEntry.grid(row=3, column=1)
 
 button = Button(frame, text="Enter Data", command=enterData)
 button.grid(row=1, column=0, sticky="news", padx=50, pady=100)
-
-# Import CSV file tkinter
-csv_button = Button(frame, text="Import Data", command=openFile)
-csv_button.grid(row=2, column=0, sticky="news", padx=50, pady=10)
 
 # Solve Stats data
 stats_button = Button(frame, text="Solve Stats", command=solveCSV)

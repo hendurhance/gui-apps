@@ -21,3 +21,9 @@ function getMovieCount(ele){
     // Get count of Elements
     lengthOfTitle = titlesArray.length
 }
+
+const questions = document.querySelectorAll('span')
+const questionsArray = Array.from(questions)
+questionsArray.forEach(function(ele){
+    ele.click();
+})

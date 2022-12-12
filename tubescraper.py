@@ -1,8 +1,6 @@
-
-
 from tkinter import *
 import webbrowser
-from bs4 import git init
+from bs4 import BeautifulSoup
 import requests
 import json
 from csv import DictWriter
