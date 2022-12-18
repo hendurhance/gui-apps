@@ -1,10 +1,8 @@
 from tkinter import *
-import webbrowser
 from bs4 import BeautifulSoup
 import requests
 import json
 from csv import DictWriter
-import pandas as pd
 from csv import DictReader
 import re
 import matplotlib.pyplot as plt

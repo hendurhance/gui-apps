@@ -1,16 +1,11 @@
+
+import tkinter as tk
 from tkinter import messagebox
 from tkinter import *
 from csv import DictWriter
 from csv import DictReader
-from csv import reader
 import pandas as pd
 import numpy as np
-import string
-from tkinter import filedialog
-from pathlib import Path
-
-
-# Defining data methods
 
 # Clear Data
 def clearData():
@@ -60,8 +55,6 @@ def enterData():
         messagebox.showerror(None, 'Firstname and Lastname is required')
 
 
-import tkinter as tk
-
 def solveCSV():
     file = "data.csv"
     df = pd.read_csv(file, usecols=['Name', 'Grade'])
@@ -70,6 +63,7 @@ def solveCSV():
     
     # Create a new Tkinter window
     window = tk.Tk()
+    window.title('Data Summary')
     
     # Add a label to the window that displays the mean
     mean_label = tk.Label(window, text="Mean: " + str(np.mean(table)))
@@ -96,8 +90,6 @@ def solveCSV():
     window.mainloop()
 
 # Define stats functions
-
-
 def solveMedian(file: str):
     newList = []
     with open(file, "r") as f:
@@ -153,7 +145,6 @@ window = Tk()
 window.geometry("600x300")
 window.title("Student Data Grade Entry App")
 
-
 frame = Frame(window)
 frame.pack()
 
@@ -183,7 +174,6 @@ matricEntry.grid(row=3, column=1)
 button = Button(frame, text="Enter Data", command=enterData)
 button.grid(row=1, column=0, sticky="news", padx=50, pady=10)
 
-# Solve Stats data
 stats_button = Button(frame, text="Solve Stats", command=solveCSV)
 stats_button.grid(row=3, column=0, sticky="news", padx=50, pady=10)
 
