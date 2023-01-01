@@ -1,0 +1,8 @@
+tkinter
+csv
+pandas
+numpy
+requests
+matplotlib
+bs4
+re
