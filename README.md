@@ -84,6 +84,7 @@ F --> G[Use charting library to display pie chart of genre and count]
 4. Run the GUI application using `python moviegenre.py`
 
 ### Result
+<img width="291" alt="image" src="https://user-images.githubusercontent.com/50846992/210184437-92f6c579-5567-494f-b5b6-adbff7ad8bc5.png">
 
 
 
@@ -170,4 +171,5 @@ graph TD;
    
 ### Result
 
+<img width="601" alt="image" src="https://user-images.githubusercontent.com/50846992/210184462-e2929cdc-7d95-4611-8567-8a2df8be4ee2.png">
 
